@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8; /* Light, pleasant background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrollbars if content slightly overflows */
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #schoolbookCanvas {
+            border: 2px solid #555; /* Optional: to see canvas bounds */
+            background-color: #fff; /* Canvas background, pages will be drawn over */
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Space between canvas and text */
+            display: block; /* Remove extra space below canvas */
+            margin-left: auto; /* Center canvas if it's smaller than container */
+            margin-right: auto;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50; /* A darker, more serious blue-gray */
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            font-weight: normal;
+            animation: fadeInText 2s ease-in-out;
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            #schoolbookCanvas {
+                /* You might want to make canvas smaller or scale it here if needed */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="schoolbookCanvas"></canvas>
+        <h1>coming soon...</h1>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('schoolbookCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // --- Configuration ---
+            const canvasWidth = 250;
+            const canvasHeight = 320;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            const bookColor = '#3498db'; // Blue for the cover
+            const pageColor = '#ecf0f1'; // Off-white for pages
+            const spineColor = '#2980b9'; // Darker blue for spine
+            const labelColor = '#ffffff';
+            const labelTextColor = '#2c3e50';
+
+            // --- Drawing Functions ---
+            function drawSchoolbook() {
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight); // Clear canvas
+
+                const bookWidth = 200;
+                const bookHeight = 280;
+                const bookX = (canvasWidth - bookWidth) / 2;
+                const bookY = (canvasHeight - bookHeight) / 2;
+
+                const spineWidth = 25;
+                const pageOffset = 5; // How much pages stick out
+
+                // 1. Draw Spine (behind everything)
+                ctx.fillStyle = spineColor;
+                ctx.beginPath();
+                ctx.moveTo(bookX, bookY + spineWidth / 3);
+                ctx.lineTo(bookX, bookY + bookHeight - spineWidth / 3);
+                ctx.lineTo(bookX + spineWidth, bookY + bookHeight);
+                ctx.lineTo(bookX + spineWidth, bookY);
+                ctx.closePath();
+                ctx.fill();
+                
+                // 2. Draw "Pages" illusion
+                ctx.fillStyle = pageColor;
+                // Right side pages
+                ctx.fillRect(
+                    bookX + spineWidth,
+                    bookY + pageOffset / 2,
+                    bookWidth - spineWidth + pageOffset,
+                    bookHeight - pageOffset
+                );
+                // Top edge of pages (subtle)
+                ctx.fillStyle = '#bdc3c7'; // slightly darker page edge
+                ctx.fillRect(
+                    bookX + spineWidth, 
+                    bookY + pageOffset / 2, 
+                    bookWidth - spineWidth + pageOffset, 
+                    2
+                );
+                // Bottom edge of pages (subtle)
+                ctx.fillRect(
+                    bookX + spineWidth, 
+                    bookY + bookHeight - pageOffset / 2 - 2, 
+                    bookWidth - spineWidth + pageOffset, 
+                    2
+                );
+
+                // 3. Draw Front Cover
+                ctx.fillStyle = bookColor;
+                ctx.fillRect(bookX + spineWidth, bookY, bookWidth - spineWidth, bookHeight);
+
+                // 4. Draw Detail on Cover (e.g., a label)
+                const labelWidth = bookWidth * 0.6;
+                const labelHeight = bookHeight * 0.2;
+                const labelX = bookX + spineWidth + (bookWidth - spineWidth - labelWidth) / 2;
+                const labelY = bookY + bookHeight * 0.15;
+
+                ctx.fillStyle = labelColor;
+                ctx.fillRect(labelX, labelY, labelWidth, labelHeight);
+                
+                // Border for the label
+                ctx.strokeStyle = '#bdc3c7'; // Light gray border
+                ctx.lineWidth = 2;
+                ctx.strokeRect(labelX, labelY, labelWidth, labelHeight);
+
+                // Text on label (optional, can be tricky to get right with small fonts)
+                ctx.fillStyle = labelTextColor;
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('NOTES', labelX + labelWidth / 2, labelY + labelHeight / 2);
+
+                // Subtle highlight on the spine
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.beginPath();
+                ctx.moveTo(bookX + spineWidth / 3, bookY + spineWidth / 2);
+                ctx.lineTo(bookX + spineWidth / 3, bookY + bookHeight - spineWidth / 2);
+                ctx.lineTo(bookX + spineWidth * 0.6, bookY + bookHeight - spineWidth / 2 - 5);
+                ctx.lineTo(bookX + spineWidth * 0.6, bookY + spineWidth / 2 + 5);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            // --- Initial Draw ---
+            drawSchoolbook();
+        });
+    </script>
+</body>
+</html>
