@@ -25,6 +25,7 @@
 
         #schoolbookCanvas {
             border: 2px solid #555; /* Optional: to see canvas bounds */
+            border-radius: 10px;
             background-color: #fff; /* Canvas background, pages will be drawn over */
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px; /* Space between canvas and text */
@@ -151,7 +152,7 @@
                 ctx.font = 'bold 16px Arial';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('NOTES', labelX + labelWidth / 2, labelY + labelHeight / 2);
+                ctx.fillText('Notizen', labelX + labelWidth / 2, labelY + labelHeight / 2);
 
                 // Subtle highlight on the spine
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
